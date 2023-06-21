@@ -1,0 +1,46 @@
+# MULTI-STAGE
+FROM node:18-alpine AS builder
+#FROM node AS builder
+ARG NODE_ENV=development 
+ENV NODE_ENV=${NODE_ENV}
+RUN apk update && apk upgrade
+RUN npm i -g @nestjs/cli
+WORKDIR /home/node/app/
+COPY ./package.json ./
+RUN npm install --legacy-peer-deps
+COPY . .
+RUN npm run build
+# CMD ["npm", "run", "build"]
+
+# pode estar com problemas para rodar o html-pdf
+# FROM node:14-alpine
+FROM node:18-alpine
+ARG NODE_ENV=production
+ENV NODE_ENV=${NODE_ENV}
+# ENV OPENSSL_CONF=/opt/openssl.cnf
+RUN apk update && apk upgrade
+# RUN apt update && apt upgrade -y
+# RUN npm i -g npm@7.21.1
+# RUN npm i -g @nestjs/cli
+# USER node
+# RUN apt-get install libfontconfig
+WORKDIR /home/node/app
+COPY --from=builder /home/node/app/package*.json /home/node/app/
+RUN npm install --only=production --legacy-peer-deps
+COPY . .
+COPY --from=builder /home/node/app/*.env /home/node/app/
+COPY --from=builder /home/node/app/src/templates/ ./src/templates/
+COPY --from=builder /home/node/app/dist/ /home/node/app/dist/
+EXPOSE 3000
+CMD ["npm", "run", "start:prod"]
+
+# SINGLE-STAGE
+# FROM node:10
+# RUN npm i -g @nestjs/cli
+# WORKDIR /home/node/app
+# COPY ./package.json ./
+# RUN npm install
+# COPY . .
+# RUN npm run build
+# EXPOSE 3000
+# CMD ["npm", "run", "start:prod"]

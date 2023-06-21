@@ -1,0 +1,65 @@
+version: '3.7'
+
+services:
+
+  nestjs:
+    build:
+      context: .
+    #  dockerfile: Dockerfile.production
+    container_name: base-nestjs
+    entrypoint: .docker/entrypoint.sh
+    restart: unless-stopped
+    ports:
+      - "3005:3000"
+    volumes:
+      - .:/home/node/app # usado para compilar no host e fornecer os servers de develop e prod
+    environment:
+      - NODE_ENV=development
+    depends_on:
+      - mysql
+    networks:
+      - ingress
+    # logging:
+    #   driver: "json-file"
+    #   options:
+    #       max-file: 2
+    #       max-size: 5m
+
+  mysql:
+    image: mysql:5.7
+    container_name: base-mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    volumes:
+      - base-dbdata:/var/lib/mysql # usado externo, fica no host mas o compose não pode excluir
+    command: ['--max_allowed_packet=32505856', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    environment:
+      - MYSQL_DATABASE=dev
+      - MYSQL_ROOT_PASSWORD=1232
+    networks:
+      - ingress
+
+  phpmyadmin:
+    image: phpmyadmin
+    container_name: base-phpmyadmin
+    restart: unless-stopped
+    environment:
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_DATABASE=dev
+      - PMA_PASSWORD=1232
+      - UPLOAD_LIMIT=2000000K
+    ports:
+      - "81:80"
+    networks:
+      - ingress
+ 
+networks:
+  ingress:
+    driver: bridge
+
+volumes:
+  base-dbdata:
+    external: true

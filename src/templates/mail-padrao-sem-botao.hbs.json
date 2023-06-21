@@ -1,0 +1,8 @@
+{
+	"baseUrl": "https://base-server.caprover.spartans.dev.br/fixed/",
+	"body": {
+		"title": "Título",
+		"subtitle": "Subtítulo",
+		"message": "Texto de mensagem aqui. Teste de informações."
+	}
+}
