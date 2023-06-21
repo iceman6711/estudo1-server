@@ -1,5 +1,5 @@
 # MULTI-STAGE
-FROM node:14-alpine AS builder
+FROM node:18-alpine AS builder
 #FROM node AS builder
 ARG NODE_ENV=development 
 ENV NODE_ENV=${NODE_ENV}

@@ -1,8 +1,8 @@
 {
-	"name": "base-server",
+	"name": "estudos1-server",
 	"version": "0.0.1",
-	"description": "Base.",
-	"author": "Spartans - Outsourcing",
+	"description": "Estudo 1 ",
+	"author": "Thiago Serrano",
 	"private": true,
 	"license": "UNLICENSED",
 	"scripts": {

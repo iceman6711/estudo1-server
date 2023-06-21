@@ -6,7 +6,7 @@ services:
     build:
       context: .
     #  dockerfile: Dockerfile.production
-    container_name: base-nestjs
+    container_name: estudos1-nestjs
     entrypoint: .docker/entrypoint.sh
     restart: unless-stopped
     ports:
@@ -27,7 +27,7 @@ services:
 
   mysql:
     image: mysql:5.7
-    container_name: base-mysql
+    container_name: estudos1-mysql
     restart: unless-stopped
     tty: true
     ports:
@@ -43,7 +43,7 @@ services:
 
   phpmyadmin:
     image: phpmyadmin
-    container_name: base-phpmyadmin
+    container_name: estudos1-phpmyadmin
     restart: unless-stopped
     environment:
       - PMA_HOST=mysql
@@ -61,5 +61,5 @@ networks:
     driver: bridge
 
 volumes:
-  base-dbdata:
-    external: true
+  estudos1-dbdata:
+    external: false
